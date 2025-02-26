@@ -1,13 +1,16 @@
 # spotter/__init__.py
 import cv2
 from ultralytics import YOLO
-
+import platform
 class Spotter:
     def __init__(self, model_path='model/yolo11l.pt'):
         # 加载YOLO模型，默认路径为'model/yolo11l.pt'
         self.model = YOLO(model_path)
-        # 初始化摄像头，0表示使用默认摄像头
-        self.cap = cv2.VideoCapture(0)
+        # 初始化摄像头，根据操作系统选择不同的调用方式
+        if platform.system() == 'Darwin':  # macOS
+            self.cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
+        else:  # Windows 或其他系统
+            self.cap = cv2.VideoCapture(0)
 
     def detect(self):
         # 持续检测循环，只要摄像头处于打开状态

@@ -17,9 +17,32 @@
   - Python 3.12.9
   请确保你已经安装了requirements.txt文件中列出的依赖项。
 ## 如何开始
-
-1. 下载Yolo11模型
+· 设置国内镜像源
+```shell
+pip config set install.trusted-host mirrors.aliyun.com
+```
+安装依赖
+```shell
+pip install -r requirements.txt
+```
+下载Yolo11模型
 ```shell
 mkdir -p model && cd model
 wget https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11l.pt
+```
+运行程序
+```shell
+cd ..
+python run.py
+```
+
+
+### 标注图片
+安装依赖
+```shell
+pip install labelimg
+```
+运行程序
+```shell
+labelimg
 ```
