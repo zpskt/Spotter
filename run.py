@@ -1,46 +1,62 @@
-import logging
+import argparse
+import os
+import platform
 
-from spotter import Spotter
-# 配置日志记录
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import torch
+
+from config import logger
+from spotter.download_dataset import download_smoke_fire_dataset
+from spotter.train import train
+
+# 定义全局变量存储项目根目录
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# 入参提取
+
+
+def run():
+
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", type=str, default="model/yolo11l.pt", help="Path to the model file")
+    parser.add_argument("--data", type=str, default="dataset/smoke/data.yaml", help="Path to the yolo train data file")
+    parser.add_argument("--epochs", type=int, default=2, help="Number of epochs to train the model")
+    parser.add_argument("--imgsz", type=int, default=320, help="Image size for training")
+    parser.add_argument("--batch", type=int, default=8, help="Batch size for training")
+    parser.add_argument("--workers", type=int, default=0, help="Number of workers for training")
+    parser.add_argument("--device", type=str, default="cuda", help="Device to use for training")
+    parser.add_argument("--name", type=str, default="yolo11l", help="Name of the model")
+    parser.add_argument("--dataset", type=bool, default=True, help="Download dataset directory")
+    opts = parser.parse_args()
+
+    # get system platform
+    platform_system = platform.system()
+    logger.info(f"System platform: {platform_system}")
+    # define model accelerator
+
+    if platform_system == "Darwin" and torch.backends.mps.is_available() and opts.device == "mps":
+        device = "mps"
+    elif torch.cuda.is_available() and opts.device == "cuda":
+        device = "cuda"
+    else:
+        device = "cpu"
+    logger.info(f"Using {device} device.")
+
+    # spotter = Spotter()
+    # spotter.detect()
+
+    # download dataset
+    if not os.path.exists("dataset/smoke/data.yaml"):
+        logger.info("Dataset not found. Downloading...")
+        download_smoke_fire_dataset()
+
+    else:
+        logger.info("Dataset found. Skipping download.")
+    train(opts)
+
 
 if __name__ == '__main__':
     try:
-        # get system platform
-        platform_system = platform.system()
-        logging.info(f"System platform: {platform_system}")
-        # define model accelerator
-        # todo: change to user to choose(cuda mps cpu )
-        if platform_system == "Darwin":
-            accelerator = "mps"
-        else:
-            accelerator = "cuda"
-        # spotter = Spotter()
-        # spotter.detect()
-        # download dataset
-        if not os.path.exists("dataset/smoke/data.yaml"):
-            logging.info("Dataset not found. Downloading...")
-            dataset_path = download_smoke_fire_dataset()
-            logging.info(f"Dataset downloaded to: {dataset_path}")
-        else:
-            logging.info("Dataset found. Skipping download.")
-
-        yolo_train_cmd = (
-                "yolo train data="
-                + "dataset/smoke/data.yaml "
-                + "model=model/yolo11l.pt "
-                + "epochs=300 imgsz=640 batch=8 workers=0 "
-                + "device="
-                + accelerator
-        )
-        # execute yolo train
-        logging.info("Starting training...")
-        return_code = os.system(yolo_train_cmd)
-        # check return code
-        if return_code == 0:
-            logging.info("Training completed successfully.")
-        else:
-            logging.error("Training failed.")
-
+        run()
     except Exception as e:
-        logging.error(f"Main program error: {e}")
+        logger.error(f"Main program error: {e}")
