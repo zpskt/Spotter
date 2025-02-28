@@ -15,6 +15,7 @@
 
 核心使用yolov11作为深度学习模型
 官网地址：https://github.com/ultralytics
+使用文档： https://docs.ultralytics.com/zh
 
 ## 环境
 
@@ -54,7 +55,12 @@ wget https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11l.pt
 cd ..
 python run.py
 ```
+
 ### 根据数据训练特定模型
+
+使用spotter.train.py进行训练
+
+### 使用自定义模型进行检测
 
 
 ### 标注图片
@@ -70,7 +76,14 @@ pip install labelimg
 ```shell
 labelimg
 ```
+
 查看GPU使用率
+
 ```shell
 nvidia-smi
 ```
+### 未来要做
+1. 添加更多模型支持，如YOLOv8等。
+2. 实现QT界面进行训练和检测。
+3. 添加更多功能，如视频流处理、物体跟踪等。
+   

@@ -8,15 +8,11 @@ from config import logger
 from spotter.download_dataset import download_smoke_fire_dataset
 from spotter.train import train
 
-# 定义全局变量存储项目根目录
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # 入参提取
 
 
 def run():
-
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, default="model/yolo11l.pt", help="Path to the model file")
     parser.add_argument("--data", type=str, default="dataset/smoke/data.yaml", help="Path to the yolo train data file")
