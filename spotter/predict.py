@@ -10,7 +10,7 @@ from config import logger, PROJECT_ROOT
 def predict():
     model = YOLO('D:\\zpskt\\Spotter\\model\\smoke_and_fire.pt')
     results = model.predict(source='D:\\zpskt\\Spotter\\data\\images', imgsz=640,
-                            project='D:\\zpskt\\Spotter\\runs\\detect', name='smoke', save=True, conf=0.2, iou=0.7, )
+                            project='D:\\zpskt\\Spotter\\runs\\detect', name='smoke', save=True, conf=0.2, iou=0.7)
     # 检查是否检测到了目标
     detected = False
     for result in results:

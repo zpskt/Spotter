@@ -1,0 +1,17 @@
+# config/sms_config.yaml
+
+# 短信服务商配置（例如：aliyun, tencent, twilio）
+provider: aliyun
+
+# 服务提供商相关参数
+credentials:
+  access_key_id: your_access_key_id      # 替换为你的实际密钥ID
+  access_key_secret: your_access_secret  # 替换为你的实际密钥Secret
+
+# 短信配置
+sms:
+  sign_name: "烟雾报警系统"               # 短信签名名称
+  template_code: "SMS_123456789"          # 短信模板ID
+  recipients:
+    - "13800138000"                      # 接收报警短信的手机号列表
+    - "13900139000"

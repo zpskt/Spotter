@@ -1,0 +1,9 @@
+# config/settings.yaml
+
+video_source: 0
+save_dir: "./detected_images"
+log_file: "./logs/smoke_detection.log"
+
+sms_enabled: true
+image_save_enabled: true
+log_enabled: true
