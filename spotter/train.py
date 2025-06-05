@@ -6,9 +6,10 @@ from ultralytics import YOLO
 from config import logger
 
 
-def train_method_one():
+def train_via_cli(opts):
     '''
-    train yolo model
+    使用yolo脚本命令训练模型
+    :param opts:
     :return:
     '''
     parser = argparse.ArgumentParser()
@@ -21,7 +22,7 @@ def train_method_one():
     parser.add_argument("--device", type=str, default="cuda", help="Device to use for training")
     parser.add_argument("--name", type=str, default="yolo11l", help="Name of the model")
     parser.add_argument("--dataset", type=bool, default=True, help="Download dataset directory")
-    opts = parser.parse_args()
+    # opts = parser.parse_args()
 
     yolo_train_cmd = (
             "yolo train"
@@ -42,8 +43,8 @@ def train_method_one():
             + " device="
             + opts.device
     )
-    # execute yolo train
     logger.info("Starting training...")
+    # 使用系统命令行训练
     return_code = os.system(yolo_train_cmd)
     # check return code
     if return_code == 0:
@@ -51,16 +52,30 @@ def train_method_one():
     else:
         logger.error("yolo training failed.")
 
-def train_method_two():
-    model = YOLO('model/yolo11n.pt')
-    model.train(data='dataset/smoke/data.yaml',
-                cache=False,
-                imgsz=640,
-                epochs=200,
-                batch=16,
-                close_mosaic=10,
-                device='0',
-                optimizer='SGD', # using SGD
-                project='runs/train-obb',
-                name='smoke',
-                )
+def train_via_api(opts):
+    """
+    Train model using YOLO's Python API.
+    :param opts: Parsed command-line options.
+    """
+    model = YOLO(opts.model)
+    model.train(
+        data=opts.data,
+        imgsz=opts.imgsz,
+        epochs=opts.epochs,
+        batch=opts.batch,
+        device=opts.device,
+        project='runs/train',
+        name=opts.name,
+        cache=False,
+        close_mosaic=10,
+        optimizer='SGD'
+    )
+
+def train(opts):
+   """
+   Unified training entry point.
+   :param opts: Parsed arguments from argparse.
+   """
+   # 可根据需求选择不同训练方法
+   train_via_cli(opts)
+   # train_via_api(opts)

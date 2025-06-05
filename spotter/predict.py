@@ -6,7 +6,7 @@ from ultralytics import YOLO
 
 from config import logger, PROJECT_ROOT
 
-
+# 预测
 def predict():
     model = YOLO('D:\\zpskt\\Spotter\\model\\smoke_and_fire.pt')
     results = model.predict(source='D:\\zpskt\\Spotter\\data\\images', imgsz=640,

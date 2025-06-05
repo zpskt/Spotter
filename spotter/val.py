@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 
-
+# 验证模型
 def val():
     model = YOLO('model/smoke_and_fire.pt')
     model.val(data='dataset/smoke/data.yaml',

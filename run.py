@@ -41,13 +41,14 @@ def run():
     # spotter = Spotter()
     # spotter.detect()
 
-    # download dataset
+    # 判断数据集是否存在
     if not os.path.exists("dataset/smoke/data.yaml"):
         logger.info("Dataset not found. Downloading...")
+        # download dataset
         download_smoke_fire_dataset()
-
     else:
         logger.info("Dataset found. Skipping download.")
+    #  训练完以后会生成模型文件
     train(opts)
 
 
